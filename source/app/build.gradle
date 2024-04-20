@@ -21,7 +21,7 @@ plugins {
 tasks.register("prepareKotlinBuildScriptModel"){}
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.jetpackexample"
@@ -53,8 +53,8 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Use to implement UWB (ultra-wideband) on supported devices
-    implementation "androidx.core.uwb:uwb-rxjava3:1.0.0-alpha05"
-    implementation "androidx.core.uwb:uwb:1.0.0-alpha05"
+    implementation "androidx.core.uwb:uwb-rxjava3:1.0.0-alpha08"
+    implementation "androidx.core.uwb:uwb:1.0.0-alpha08"
 
     // Align versions of all Kotlin components to avoid compilation issues with alpha05
     implementation(platform("org.jetbrains.kotlin:kotlin-bom:1.8.0"))

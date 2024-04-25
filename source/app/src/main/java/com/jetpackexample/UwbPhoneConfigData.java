@@ -20,119 +20,101 @@ import com.jetpackexample.utils.Utils;
 
 import java.io.Serializable;
 
+// Reverse-engineered config from the Estimote UWB app
+// all values in little-endian
+//
+// short specVerMajor // must be 1
+// short specVerMinor // must be 1
+// 4: 0x19 0x45 0x55 // ??
+// 7:  int   Session_ID
+// 11: byte  Preamble_Code
+// 12: byte  Channel_Number
+// 13: short Number_of_slots // Round_Duration_RSTU = Number_of_slots * Slot_Duration_RSTU
+// 15: short Slot_Duration_RSTU
+// 17: short Block_Duration_ms
+// 19: byte  unknown // must be 3, so that ToF_Report = 1
+// 20-25: byte Static_STS_IV[6] // in reverse order
+// 26: byte DST_ADDR[2]
+// 28: short Block_Timing_Stability
+
+// Vendor_ID[2] = { 0x4C, 0x00 };
+// role = 1; // gCurrentRangingRole
+// STS_Config = 0;
+// MAX_RR_Retry = 0;
+// enc_payload = 1;
+// Ranging_Round_Usage = 2;
+// SP0_PHY_Set = 2;
+// SP3_PHY_Set = 4;
+// Rframe_Config = 3;
+// UWB_Init_Time_ms = 5;
+
 public class UwbPhoneConfigData implements Serializable {
-    short specVerMajor;
-    short specVerMinor;
-    int sessionId;
-    byte preambleId;
-    byte channel;
-    byte profileId;
-    byte deviceRangingRole;
-    byte[] phoneMacAddress;
-
+    public short specVerMajor;
+    public short specVerMinor;
+    public byte[] reserved;
+    public int sessionId;
+    public byte preambleId;
+    public byte channel;
+    public short numberOfSlots;
+    public short slotDurationRSTU;
+    public short blockDurationMs;
+    public byte unknown;
+    public byte[] staticSTSIV;
+    public byte[] phoneMacAddress;
+    public short blockTimingStability;
+ 
     public UwbPhoneConfigData() {
-
+        specVerMajor = 1;
+        specVerMinor = 1;
+        reserved = new byte[]{0x19, 0x45, 0x55};
+        unknown = 3;
+        preambleId = 11;
+        channel = 9;
+        numberOfSlots = 6;
+//        slotDurationRSTU = 3600;
+//        blockDurationMs = 180;
+        slotDurationRSTU = 2400;
+        blockDurationMs = 180;
+        staticSTSIV = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        phoneMacAddress = new byte[]{0x4c, 0x00};
+        blockTimingStability = 0x0064;
     }
 
-    public UwbPhoneConfigData(short specVerMajor, short specVerMinor, int sessionId, byte preambleId, byte channel, byte profileId, byte deviceRangingRole, byte[] phoneMacAddress) {
-        this.specVerMajor = specVerMajor;
-        this.specVerMinor = specVerMinor;
-        this.sessionId = sessionId;
-        this.preambleId = preambleId;
-        this.channel = channel;
-        this.profileId = profileId;
-        this.deviceRangingRole = deviceRangingRole;
-        this.phoneMacAddress = phoneMacAddress;
-    }
-
-    public short getSpecVerMajor() {
-        return specVerMajor;
-    }
-
-    public void setSpecVerMajor(short specVerMajor) {
-        this.specVerMajor = specVerMajor;
-    }
-
-    public short getSpecVerMinor() {
-        return specVerMinor;
-    }
-
-    public void setSpecVerMinor(short specVerMinor) {
-        this.specVerMinor = specVerMinor;
-    }
-
-    public int getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(int sessionId) {
-        this.sessionId = sessionId;
-    }
-
-    public byte getPreambleId() {
-        return preambleId;
-    }
-
-    public void setPreambleId(byte preambleId) {
-        this.preambleId = preambleId;
-    }
-
-    public byte getChannel() {
-        return channel;
-    }
-
-    public void setChannel(byte channel) {
-        this.channel = channel;
-    }
-
-    public byte getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(byte profileId) {
-        this.profileId = profileId;
-    }
-
-    public byte getDeviceRangingRole() {
-        return deviceRangingRole;
-    }
-
-    public void setDeviceRangingRole(byte deviceRangingRole) {
-        this.deviceRangingRole = deviceRangingRole;
-    }
-
-    public byte[] getPhoneMacAddress() {
-        return phoneMacAddress;
-    }
-
-    public void setPhoneMacAddress(byte[] phoneMacAddress) {
-        this.phoneMacAddress = phoneMacAddress;
-    }
 
     public byte[] toByteArray() {
         byte[] response = null;
         response = Utils.concat(response, Utils.shortToByteArray(this.specVerMajor));
         response = Utils.concat(response, Utils.shortToByteArray(this.specVerMinor));
+        response = Utils.concat(response, this.reserved);
         response = Utils.concat(response, Utils.intToByteArray(this.sessionId));
         response = Utils.concat(response, Utils.byteToByteArray(this.preambleId));
         response = Utils.concat(response, Utils.byteToByteArray(this.channel));
-        response = Utils.concat(response, Utils.byteToByteArray(this.profileId));
-        response = Utils.concat(response, Utils.byteToByteArray(this.deviceRangingRole));
+        response = Utils.concat(response, Utils.shortToByteArray(this.numberOfSlots));
+        response = Utils.concat(response, Utils.shortToByteArray(this.slotDurationRSTU));
+        response = Utils.concat(response, Utils.shortToByteArray(this.blockDurationMs));
+        response = Utils.concat(response, Utils.byteToByteArray(this.unknown));
+        response = Utils.concat(response, this.staticSTSIV);
         response = Utils.concat(response, this.phoneMacAddress);
+        response = Utils.concat(response, Utils.shortToByteArray(this.blockTimingStability));
 
         return response;
     }
 
     public static UwbPhoneConfigData fromByteArray(byte[] data) {
         UwbPhoneConfigData uwbPhoneConfigData = new UwbPhoneConfigData();
-        uwbPhoneConfigData.setSpecVerMajor(Utils.byteArrayToShort(Utils.extract(data, 2, 0)));
-        uwbPhoneConfigData.setSpecVerMinor(Utils.byteArrayToShort(Utils.extract(data, 2, 2)));
-        uwbPhoneConfigData.setSessionId(Utils.byteArrayToShort(Utils.extract(data, 4, 4)));
-        uwbPhoneConfigData.setPreambleId(Utils.byteArrayToByte(Utils.extract(data, 1, 8)));
-        uwbPhoneConfigData.setChannel(Utils.byteArrayToByte(Utils.extract(data, 1, 9)));
-        uwbPhoneConfigData.setProfileId(Utils.byteArrayToByte(Utils.extract(data, 1, 10)));
-        uwbPhoneConfigData.setDeviceRangingRole(Utils.byteArrayToByte(Utils.extract(data, 1, 11)));
-        uwbPhoneConfigData.setPhoneMacAddress(Utils.extract(data, 2, 12));
+        uwbPhoneConfigData.specVerMajor = Utils.byteArrayToShort(Utils.extract(data, 2, 0));
+        uwbPhoneConfigData.specVerMinor = Utils.byteArrayToShort(Utils.extract(data, 2, 2));
+        uwbPhoneConfigData.reserved = Utils.extract(data, 3, 4);
+        uwbPhoneConfigData.sessionId = Utils.byteArrayToInt(Utils.extract(data, 4, 7));
+        uwbPhoneConfigData.preambleId = Utils.byteArrayToByte(Utils.extract(data, 1, 11));
+        uwbPhoneConfigData.channel = Utils.byteArrayToByte(Utils.extract(data, 1, 12));
+        uwbPhoneConfigData.numberOfSlots = Utils.byteArrayToShort(Utils.extract(data, 2, 13));
+        uwbPhoneConfigData.slotDurationRSTU = Utils.byteArrayToShort(Utils.extract(data, 2, 15));
+        uwbPhoneConfigData.blockDurationMs = Utils.byteArrayToShort(Utils.extract(data, 2, 17));
+        uwbPhoneConfigData.unknown = Utils.byteArrayToByte(Utils.extract(data, 1, 19));
+        uwbPhoneConfigData.staticSTSIV = Utils.extract(data, 6, 20);
+        uwbPhoneConfigData.phoneMacAddress = Utils.extract(data, 2, 26);
+        uwbPhoneConfigData.blockTimingStability = Utils.byteArrayToShort(Utils.extract(data, 2, 28));
 
         return uwbPhoneConfigData;
     }

@@ -186,11 +186,11 @@ public class Utils {
         if (b.length == 1) {
             return b[0] & 0xFF;
         } else if (b.length == 2) {
-            return ((b[0] & 0xFF) << 8) + (b[1] & 0xFF);
+            return ((b[1] & 0xFF) << 8) + (b[0] & 0xFF);
         } else if (b.length == 3) {
-            return ((b[0] & 0xFF) << 16) + ((b[1] & 0xFF) << 8) + (b[2] & 0xFF);
+            return ((b[2] & 0xFF) << 16) + ((b[1] & 0xFF) << 8) + (b[0] & 0xFF);
         } else if (b.length == 4) {
-            return (b[0] << 24) + ((b[1] & 0xFF) << 16) + ((b[2] & 0xFF) << 8) + (b[3] & 0xFF);
+            return (b[3] << 24) + ((b[2] & 0xFF) << 16) + ((b[1] & 0xFF) << 8) + (b[0] & 0xFF);
         } else
             throw new IndexOutOfBoundsException();
     }
@@ -203,10 +203,10 @@ public class Utils {
      */
     public static byte[] intToByteArray(int value) {
         byte[] result = new byte[4];
-        result[3] = (byte) (value & 0xff);
-        result[2] = (byte) ((value >> 8) & 0xff);
-        result[1] = (byte) ((value >> 16) & 0xff);
-        result[0] = (byte) ((value >> 24) & 0xff);
+        result[0] = (byte) (value & 0xff);
+        result[1] = (byte) ((value >> 8) & 0xff);
+        result[2] = (byte) ((value >> 16) & 0xff);
+        result[3] = (byte) ((value >> 24) & 0xff);
         return result;
     }
 
@@ -218,8 +218,8 @@ public class Utils {
      */
     public static byte[] shortToByteArray(short value) {
         byte[] result = new byte[2];
-        result[1] = (byte) (value & 0xff);
-        result[0] = (byte) ((value >> 8) & 0xff);
+        result[0] = (byte) (value & 0xff);
+        result[1] = (byte) ((value >> 8) & 0xff);
         return result;
     }
 
@@ -233,7 +233,7 @@ public class Utils {
         if (b.length == 1) {
             return (short) (b[0] & 0xFF);
         } else if (b.length == 2) {
-            return (short) (((b[0] & 0xFF) << 8) + (b[1] & 0xFF));
+            return (short) (((b[1] & 0xFF) << 8) + (b[0] & 0xFF));
         } else
             throw new IndexOutOfBoundsException();
     }

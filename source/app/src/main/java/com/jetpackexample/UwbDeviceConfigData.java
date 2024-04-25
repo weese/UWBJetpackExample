@@ -132,7 +132,7 @@ public class UwbDeviceConfigData implements Serializable {
         uwbDeviceConfigData.setMwVersion(Utils.extract(data, 3, 8));
         uwbDeviceConfigData.setSupportedUwbProfileIds(Utils.byteArrayToInt(Utils.extract(data, 4, 11)));
         uwbDeviceConfigData.setSupportedDeviceRangingRoles(Utils.byteArrayToByte(Utils.extract(data, 1, 15)));
-        uwbDeviceConfigData.setDeviceMacAddress(Utils.extract(data, 2, 16));
+        uwbDeviceConfigData.setDeviceMacAddress(Utils.extract(data, 2, 34));
 
         return uwbDeviceConfigData;
     }

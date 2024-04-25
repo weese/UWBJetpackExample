@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         byte messageId = data[0];
 
         if (messageId == MessageId.uwbDeviceConfigurationData.getValue()) {
-            byte[] trimmedData = Utils.trimLeadingBytes(data, 17);
+            byte[] trimmedData = Utils.trimLeadingBytes(data, 1);
             configureUwbRangingSession(trimmedData);
         } else if (messageId == MessageId.uwbDidStart.getValue()) {
             uwbRangingSessionStarted();

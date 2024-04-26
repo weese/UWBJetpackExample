@@ -134,7 +134,7 @@ public class UwbManagerImpl {
             Log.d(TAG, "UWB Local Address: " + localAddress);
 
             // UWB Shield device
-            UwbAddress shieldUwbAddress = new UwbAddress(uwbDeviceConfigData.getDeviceMacAddress());
+            UwbAddress shieldUwbAddress = new UwbAddress(uwbDeviceConfigData.deviceMacAddress);
             UwbDevice shieldUwbDevice = new UwbDevice(shieldUwbAddress);
             Log.d(TAG, "UWB Destination Address: " + shieldUwbAddress);
 

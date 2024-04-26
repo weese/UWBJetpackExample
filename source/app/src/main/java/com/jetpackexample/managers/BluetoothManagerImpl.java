@@ -50,7 +50,6 @@ public class BluetoothManagerImpl {
 
     private static final String TAG = BluetoothManagerImpl.class.getName();
 
-    /// MK UWB Kit defined UUIDs (QPP Profile)
     protected static UUID estimoteServiceID = UUID.fromString("0000FE9A-0000-1000-8000-00805F9B34FB");
     protected static UUID serviceUUID = UUID.fromString("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
     protected static UUID rxCharacteristicUUID = UUID.fromString("6E400002-B5A3-F393-E0A9-E50E24DCCA9E");

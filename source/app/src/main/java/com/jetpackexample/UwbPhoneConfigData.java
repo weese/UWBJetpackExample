@@ -76,7 +76,7 @@ public class UwbPhoneConfigData implements Serializable {
          *
          * <p> Typical use case: smart phone interacts with many smart devices
          */
-        
+
         specVerMajor = 1;
         specVerMinor = 1;
         reserved = new byte[]{0x19, 0x45, 0x55};

@@ -203,11 +203,10 @@ public class UwbManagerImpl {
             UwbPhoneConfigData uwbPhoneConfigData = new UwbPhoneConfigData();
             uwbPhoneConfigData.sessionId = sessionId;
             uwbPhoneConfigData.preambleId = (byte)UWB_PREAMBLE_INDEX;
-            uwbPhoneConfigData.channel = (byte) UWB_CHANNEL;
+            uwbPhoneConfigData.channel = (byte)UWB_CHANNEL;
             uwbPhoneConfigData.staticSTSIV = Utils.extract(sessionKey, 6, 2);
             Collections.reverse(Arrays.asList(uwbPhoneConfigData.staticSTSIV));
             uwbPhoneConfigData.phoneMacAddress = localAddress.getAddress();
-            Log.d(TAG, "UWB Phone Config Data: " + uwbPhoneConfigData.phoneMacAddress[0] + " " + uwbPhoneConfigData.phoneMacAddress[1]);
 
             // Send the UWB ranging session configuration data back to the listener
             uwbRangingListener.onRangingStarted(uwbPhoneConfigData);

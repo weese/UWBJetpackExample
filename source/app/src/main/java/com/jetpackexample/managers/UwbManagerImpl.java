@@ -103,7 +103,7 @@ public class UwbManagerImpl {
 
             // byte uwbDeviceRangingRole = selectUwbDeviceRangingRole(uwbDeviceConfigData.getSupportedDeviceRangingRoles());
             // Log.d(TAG, "Uwb device supported ranging roles: " + uwbDeviceConfigData.getSupportedDeviceRangingRoles() + ", selected role for UWB device: " + uwbDeviceRangingRole);
-            byte uwbDeviceRangingRole = 2;
+            byte uwbDeviceRangingRole = 1;
 
             // byte uwbProfileId = selectUwbProfileId(uwbDeviceConfigData.getSupportedUwbProfileIds());
             // Log.d(TAG, "Uwb device supported UWB profile IDs: " + uwbDeviceConfigData.getSupportedUwbProfileIds() + ", selected UWB profile ID: " + uwbProfileId);
@@ -160,7 +160,7 @@ public class UwbManagerImpl {
 //                    null,
                     uwbComplexChannel,
                     listUwbDevices,
-                    RangingParameters.RANGING_UPDATE_RATE_AUTOMATIC
+                    RangingParameters.RANGING_UPDATE_RATE_FREQUENT
             );
 
             Flowable<RangingResult> rangingResultFlowable;

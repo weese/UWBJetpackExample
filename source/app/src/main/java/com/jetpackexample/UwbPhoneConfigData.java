@@ -70,12 +70,12 @@ public class UwbPhoneConfigData implements Serializable {
         unknown = 3;
         preambleId = 11;
         channel = 9;
-        numberOfSlots = 6;
+//        numberOfSlots = 6;
 //        slotDurationRSTU = 3600;
 //        blockDurationMs = 180;
         slotDurationRSTU = 2400;
         blockDurationMs = 200;
-//        numberOfSlots = 30;
+        numberOfSlots = 30;
         staticSTSIV = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         phoneMacAddress = new byte[]{0x4c, 0x00};
         blockTimingStability = 0x0064;

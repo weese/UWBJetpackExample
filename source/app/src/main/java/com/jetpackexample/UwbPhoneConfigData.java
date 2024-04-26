@@ -74,7 +74,8 @@ public class UwbPhoneConfigData implements Serializable {
 //        slotDurationRSTU = 3600;
 //        blockDurationMs = 180;
         slotDurationRSTU = 2400;
-        blockDurationMs = 200;
+//        blockDurationMs = 200;
+        blockDurationMs = 360;
         numberOfSlots = 30;
         staticSTSIV = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         phoneMacAddress = new byte[]{0x4c, 0x00};

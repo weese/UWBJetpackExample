@@ -155,9 +155,9 @@ public class UwbManagerImpl {
             RangingParameters rangingParameters = new RangingParameters(
                     uwbProfileId,
                     sessionId,
-//                    0,
+                    0,
                     sessionKey,
-//                    null,
+                    null,
                     uwbComplexChannel,
                     listUwbDevices,
                     RangingParameters.RANGING_UPDATE_RATE_FREQUENT

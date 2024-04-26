@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity
         uwbDeviceConfigurationData((byte) 0x01),
         uwbDidStart((byte) 0x02),
         uwbDidStop((byte) 0x03),
+        remoteDistance((byte) 0x30),
 
         // Messages from the Uwb phone
         initialize((byte) 0x0A),
@@ -229,6 +230,8 @@ public class MainActivity extends AppCompatActivity
             uwbRangingSessionStarted();
         } else if (messageId == MessageId.uwbDidStop.getValue()) {
             uwbRangingSessionStopped();
+        } else if (messageId == MessageId.remoteDistance.getValue()) {
+            Log.i(TAG, "Remote distance: " + data[1]);
         } else {
             throw new IllegalArgumentException("Unexpected value");
         }

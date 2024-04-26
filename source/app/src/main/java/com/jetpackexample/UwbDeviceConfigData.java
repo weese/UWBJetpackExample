@@ -16,6 +16,8 @@
 
 package com.jetpackexample;
 
+import android.util.Log;
+
 import com.jetpackexample.utils.Utils;
 
 import java.io.Serializable;
@@ -31,24 +33,21 @@ public class UwbDeviceConfigData implements Serializable {
 
     // uwbConfigData:
 
-    //  0: public short major
-    //  2: public short minor
-    //  4: public byte 3F
-    //  5: public byte F5
-    //  6: public byte 03
-    //  7: public byte 00
-    //  8: public byte B8
-    //  9: public byte 0B
-    // 10: public byte 00
-    // 11: public byte 00
-    // 12: public byte 00
-    // 13: public byte 00
-    // 14: public byte 01
-    // 15: public byte 01
-    // 16: rangingRole 01
-    // 17: public byte[] deviceMacAddress
-    // 19: public byte 19
-    // 20: public byte 00
+    // Estimote Beacon
+    //  0: public short major (1)
+    //  2: public short minor (0)
+    //  4: public byte 3FF50300B80B000002090900
+    // 16: rangingRole (1)
+    // 17: public byte[2] deviceMacAddress
+
+    // Qorvo NI Example
+    //  0: public short major (1)
+    //  2: public short minor (1)
+    //  4: public byte 3FF50300B80B000000000101
+    // 16: rangingRole (1)
+    // 17: public byte[2] deviceMacAddress
+    // 19: public byte (19)
+    // 20: public byte (0)
 
     public UwbDeviceConfigData() {
         specVerMajor = 1;
@@ -86,11 +85,10 @@ public class UwbDeviceConfigData implements Serializable {
         uwbDeviceConfigData.rfu = Utils.extract(data, 10, 5);
         byte uwbConfigDataLength = Utils.byteArrayToByte(Utils.extract(data, 1, 15));
         byte[] uwbConfigData = Utils.extract(data, uwbConfigDataLength, 16);
-        if (uwbConfigDataLength == 21) {
+        if (uwbConfigDataLength == 19 || uwbConfigDataLength == 21) {
             uwbDeviceConfigData.deviceRangingRole = Utils.byteArrayToByte(Utils.extract(uwbConfigData, 1, 16));
             uwbDeviceConfigData.deviceMacAddress = Utils.extract(uwbConfigData, 2, 17);
         }
-
         return uwbDeviceConfigData;
     }
 }

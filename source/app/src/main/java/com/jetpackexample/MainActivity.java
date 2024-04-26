@@ -38,6 +38,8 @@ import com.jetpackexample.managers.LocationManagerImpl;
 import com.jetpackexample.managers.UwbManagerImpl;
 import com.jetpackexample.utils.Utils;
 
+import java.nio.charset.StandardCharsets;
+
 public class MainActivity extends AppCompatActivity
         implements BluetoothManagerImpl.BluetoothConnectionListener, BluetoothManagerImpl.BluetoothDataReceivedListener {
 
@@ -74,12 +76,15 @@ public class MainActivity extends AppCompatActivity
         uwbDeviceConfigurationData((byte) 0x01),
         uwbDidStart((byte) 0x02),
         uwbDidStop((byte) 0x03),
-        remoteDistance((byte) 0x30),
 
         // Messages from the Uwb phone
         initialize((byte) 0x0A),
         uwbPhoneConfigurationData((byte) 0x0B),
-        stop((byte) 0x0C);
+        stop((byte) 0x0C),
+
+        // Custom Messages
+        iOSNotify((byte) 0x2F),
+        remoteDistance((byte) 0x30);
 
         private final byte value;
 
@@ -230,6 +235,8 @@ public class MainActivity extends AppCompatActivity
             uwbRangingSessionStarted();
         } else if (messageId == MessageId.uwbDidStop.getValue()) {
             uwbRangingSessionStopped();
+        } else if (messageId == MessageId.iOSNotify.getValue()) {
+            Log.i(TAG, "Message: " + new String(Utils.extract(data, data.length - 3, 3), StandardCharsets.UTF_8));
         } else if (messageId == MessageId.remoteDistance.getValue()) {
             Log.i(TAG, "Remote distance: " + data[1]);
         } else {

@@ -37,6 +37,8 @@ import com.jetpackexample.UwbPhoneConfigData;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -101,12 +103,9 @@ public class UwbManagerImpl {
     public void startRanging(UwbDeviceConfigData uwbDeviceConfigData, UwbRangingListener uwbRangingListener) {
         Thread t = new Thread(() -> {
 
-            // byte uwbDeviceRangingRole = selectUwbDeviceRangingRole(uwbDeviceConfigData.getSupportedDeviceRangingRoles());
-            // Log.d(TAG, "Uwb device supported ranging roles: " + uwbDeviceConfigData.getSupportedDeviceRangingRoles() + ", selected role for UWB device: " + uwbDeviceRangingRole);
-            byte uwbDeviceRangingRole = 1;
+            byte uwbDeviceRangingRole = uwbDeviceConfigData.deviceRangingRole;
+            Log.d(TAG, "Uwb device ranging role: " + uwbDeviceRangingRole);
 
-            // byte uwbProfileId = selectUwbProfileId(uwbDeviceConfigData.getSupportedUwbProfileIds());
-            // Log.d(TAG, "Uwb device supported UWB profile IDs: " + uwbDeviceConfigData.getSupportedUwbProfileIds() + ", selected UWB profile ID: " + uwbProfileId);
             byte uwbProfileId = (byte)RangingParameters.CONFIG_UNICAST_DS_TWR;
 
             UwbAddress localAddress;
@@ -124,7 +123,6 @@ public class UwbManagerImpl {
 
             // Assign a random Session ID
             int sessionId = new Random().nextInt();
-            sessionId = 0x01010101;
             Log.d(TAG, "UWB sessionId: " + sessionId);
 
             UwbComplexChannel uwbComplexChannel = new UwbComplexChannel(UWB_CHANNEL, UWB_PREAMBLE_INDEX);
@@ -144,12 +142,7 @@ public class UwbManagerImpl {
             // https://developer.android.com/guide/topics/connectivity/uwb#known_issue_byte_order_reversed_for_mac_address_and_static_sts_vendor_id_fields
             // GMS Core update is doing byte reverse as per UCI spec
             // SessionKey is used to match Vendor ID in UWB Device firmware
-            // byte[] sessionKey = Utils.hexStringToByteArray("0807010203040506");
-//            byte[] sessionKey = Utils.hexStringToByteArray("0102030405060708");
-//            byte[] sessionKey = Utils.hexStringToByteArray("0708010203040506");
-            byte[] sessionKey = Utils.hexStringToByteArray("4C00000000000000");
-//            byte[] sessionKey = Utils.hexStringToByteArray("004C000000000000");
-//            byte[] sessionKey = Utils.hexStringToByteArray("000000000000004C");
+            byte[] sessionKey = Utils.hexStringToByteArray("4C00010203040506");
 
             Log.d(TAG, "Configure ranging parameters for Profile ID: " + uwbProfileId);
             RangingParameters rangingParameters = new RangingParameters(
@@ -211,8 +204,9 @@ public class UwbManagerImpl {
             uwbPhoneConfigData.sessionId = sessionId;
             uwbPhoneConfigData.preambleId = (byte)UWB_PREAMBLE_INDEX;
             uwbPhoneConfigData.channel = (byte) UWB_CHANNEL;
-//            uwbPhoneConfigData.staticSTSIV = Utils.extract(sessionKey, 6, 2);
-             uwbPhoneConfigData.phoneMacAddress = localAddress.getAddress();
+            uwbPhoneConfigData.staticSTSIV = Utils.extract(sessionKey, 6, 2);
+            Collections.reverse(Arrays.asList(uwbPhoneConfigData.staticSTSIV));
+            uwbPhoneConfigData.phoneMacAddress = localAddress.getAddress();
             Log.d(TAG, "UWB Phone Config Data: " + uwbPhoneConfigData.phoneMacAddress[0] + " " + uwbPhoneConfigData.phoneMacAddress[1]);
 
             // Send the UWB ranging session configuration data back to the listener

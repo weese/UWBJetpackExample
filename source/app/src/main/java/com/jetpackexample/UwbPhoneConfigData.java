@@ -64,6 +64,19 @@ public class UwbPhoneConfigData implements Serializable {
     public short blockTimingStability;
  
     public UwbPhoneConfigData() {
+        /**
+         * Pre-defined one-to-many STATIC STS DS-TWR ranging
+         *
+         * deferred mode,
+         * ranging interval = 200 ms,
+         * slot duration = 2400 RSTU,
+         * slots per ranging round = 20
+         *
+         * All other MAC parameters use FiRa/UCI default values.
+         *
+         * <p> Typical use case: smart phone interacts with many smart devices
+         */
+        
         specVerMajor = 1;
         specVerMinor = 1;
         reserved = new byte[]{0x19, 0x45, 0x55};
@@ -74,9 +87,8 @@ public class UwbPhoneConfigData implements Serializable {
 //        slotDurationRSTU = 3600;
 //        blockDurationMs = 180;
         slotDurationRSTU = 2400;
-//        blockDurationMs = 200;
-        blockDurationMs = 360;
-        numberOfSlots = 30;
+        blockDurationMs = 200;
+        numberOfSlots = 20;
         staticSTSIV = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
         phoneMacAddress = new byte[]{0x4c, 0x00};
         blockTimingStability = 0x0064;

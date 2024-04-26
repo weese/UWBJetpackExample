@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity
                                 bluetoothManagerImpl.startLeDeviceScan(device -> {
                                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                                         // Ignore devices that do not define name or address
-                                        if ((device.getName() == null) || (device.getAddress() == null)) {
+                                        if (/*(device.getName() == null) || */(device.getAddress() == null)) {
                                             return;
                                         }
 

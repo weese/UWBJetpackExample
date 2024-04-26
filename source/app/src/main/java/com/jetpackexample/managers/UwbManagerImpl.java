@@ -208,6 +208,12 @@ public class UwbManagerImpl {
 
             // Create ShareableData with configured UWB Session params
             UwbPhoneConfigData uwbPhoneConfigData = new UwbPhoneConfigData();
+            uwbPhoneConfigData.specVerMajor = 1;
+            uwbPhoneConfigData.specVerMinor = 1;
+            if (uwbDeviceConfigData.uwbConfigDataLen == 19) {
+                // To be compatible with Estimote beacon
+                uwbPhoneConfigData.specVerMinor = 0;
+            }
             uwbPhoneConfigData.sessionId = sessionId;
             uwbPhoneConfigData.preambleId = (byte)UWB_PREAMBLE_INDEX;
             uwbPhoneConfigData.channel = (byte)UWB_CHANNEL;

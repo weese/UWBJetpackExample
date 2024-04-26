@@ -24,11 +24,11 @@ import java.io.Serializable;
 // all values in little-endian
 //
 // short specVerMajor // must be 1
-// short specVerMinor // must be 1
+// short specVerMinor // must be 0 (Estimote) or 1 (latest Qorvo example)
 // 4: 0x19 0x45 0x55 // ??
 // 7:  int   Session_ID
-// 11: byte  Preamble_Code
-// 12: byte  Channel_Number
+// 11: byte  Preamble_Code (11)
+// 12: byte  Channel_Number (9)
 // 13: short Number_of_slots // Round_Duration_RSTU = Number_of_slots * Slot_Duration_RSTU
 // 15: short Slot_Duration_RSTU
 // 17: short Block_Duration_ms
@@ -123,7 +123,9 @@ public class UwbPhoneConfigData implements Serializable {
         response = Utils.concat(response, Utils.byteToByteArray(this.unknown));
         response = Utils.concat(response, this.staticSTSIV);
         response = Utils.concat(response, this.phoneMacAddress);
-        response = Utils.concat(response, Utils.shortToByteArray(this.blockTimingStability));
+        if (specVerMinor > 0) {
+            response = Utils.concat(response, Utils.shortToByteArray(this.blockTimingStability));
+        }
 
         return response;
     }
@@ -142,8 +144,9 @@ public class UwbPhoneConfigData implements Serializable {
         uwbPhoneConfigData.unknown = Utils.byteArrayToByte(Utils.extract(data, 1, 19));
         uwbPhoneConfigData.staticSTSIV = Utils.extract(data, 6, 20);
         uwbPhoneConfigData.phoneMacAddress = Utils.extract(data, 2, 26);
-        uwbPhoneConfigData.blockTimingStability = Utils.byteArrayToShort(Utils.extract(data, 2, 28));
-
+        if (uwbPhoneConfigData.specVerMinor > 0) {
+            uwbPhoneConfigData.blockTimingStability = Utils.byteArrayToShort(Utils.extract(data, 2, 28));
+        }
         return uwbPhoneConfigData;
     }
 }

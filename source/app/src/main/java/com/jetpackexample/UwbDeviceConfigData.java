@@ -29,7 +29,7 @@ public class UwbDeviceConfigData implements Serializable {
     public byte[] rfu;
     public byte deviceRangingRole;
     public byte[] deviceMacAddress;
-//    public byte uwbConfigDataLen; // sizeof(uwbConfigData)
+    public byte uwbConfigDataLen; // sizeof(uwbConfigData)
 
     // uwbConfigData:
 
@@ -54,6 +54,7 @@ public class UwbDeviceConfigData implements Serializable {
         specVerMinor = 0;
         preferredUpdateRate = 20;   // 0..automatic, 10..infrequent, 20..user interactive
         rfu = new byte[10];
+        uwbConfigDataLen = 0;
         deviceRangingRole = 0;      // 0..controlee, 1..controller
     }
 
@@ -83,9 +84,9 @@ public class UwbDeviceConfigData implements Serializable {
         uwbDeviceConfigData.specVerMinor = Utils.byteArrayToShort(Utils.extract(data, 2, 2));
         uwbDeviceConfigData.preferredUpdateRate = Utils.byteArrayToByte(Utils.extract(data, 1, 4));
         uwbDeviceConfigData.rfu = Utils.extract(data, 10, 5);
-        byte uwbConfigDataLength = Utils.byteArrayToByte(Utils.extract(data, 1, 15));
-        byte[] uwbConfigData = Utils.extract(data, uwbConfigDataLength, 16);
-        if (uwbConfigDataLength == 19 || uwbConfigDataLength == 21) {
+        uwbDeviceConfigData.uwbConfigDataLen = Utils.byteArrayToByte(Utils.extract(data, 1, 15));
+        byte[] uwbConfigData = Utils.extract(data, uwbDeviceConfigData.uwbConfigDataLen, 16);
+        if (uwbDeviceConfigData.uwbConfigDataLen == 19 || uwbDeviceConfigData.uwbConfigDataLen == 21) {
             uwbDeviceConfigData.deviceRangingRole = Utils.byteArrayToByte(Utils.extract(uwbConfigData, 1, 16));
             uwbDeviceConfigData.deviceMacAddress = Utils.extract(uwbConfigData, 2, 17);
         }

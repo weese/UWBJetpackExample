@@ -64,6 +64,23 @@ public class UwbPhoneConfigData implements Serializable {
     public short blockTimingStability;
  
     public UwbPhoneConfigData() {
+        // Found these comments in Jetpack uwb library androidx/core/uwb/RangingParameters.kt:
+
+        // CONFIG_UNICAST_DS_TWR
+        /**
+         * Pre-defined unicast STATIC STS DS-TWR ranging.
+         *
+         * deferred mode,
+         * ranging interval = 240 ms,
+         * slot duration = 2400 RSTU,
+         * slots per ranging round = 6
+         *
+         * All other MAC parameters use FiRa/UCI default values.
+         *
+         * <p> Typical use case: device tracking tags
+         */
+
+        // CONFIG_MULTICAST_DS_TWR
         /**
          * Pre-defined one-to-many STATIC STS DS-TWR ranging
          *
@@ -83,14 +100,11 @@ public class UwbPhoneConfigData implements Serializable {
         unknown = 3;
         preambleId = 11;
         channel = 9;
-//        numberOfSlots = 6;
-//        slotDurationRSTU = 3600;
-//        blockDurationMs = 180;
         slotDurationRSTU = 2400;
-        blockDurationMs = 200;
-        numberOfSlots = 20;
+        blockDurationMs = 240;
+        numberOfSlots = 6;
         staticSTSIV = new byte[]{0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-        phoneMacAddress = new byte[]{0x4c, 0x00};
+        phoneMacAddress = new byte[]{0x00, 0x00};
         blockTimingStability = 0x0064;
     }
 

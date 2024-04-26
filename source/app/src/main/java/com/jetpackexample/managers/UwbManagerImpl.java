@@ -37,8 +37,6 @@ import com.jetpackexample.UwbPhoneConfigData;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -142,9 +140,18 @@ public class UwbManagerImpl {
             // https://developer.android.com/guide/topics/connectivity/uwb#known_issue_byte_order_reversed_for_mac_address_and_static_sts_vendor_id_fields
             // GMS Core update is doing byte reverse as per UCI spec
             // SessionKey is used to match Vendor ID in UWB Device firmware
-            byte[] sessionKey = Utils.hexStringToByteArray("4C00010203040506");
+//            byte[] sessionKey = Utils.hexStringToByteArray("4C00010203040506");
+            byte[] sessionKey = Utils.hexStringToByteArray("4C00000000000000");
 
             Log.d(TAG, "Configure ranging parameters for Profile ID: " + uwbProfileId);
+
+            int updateRateType = RangingParameters.RANGING_UPDATE_RATE_AUTOMATIC;
+            if (uwbDeviceConfigData.preferredUpdateRate == 10) {
+                updateRateType = RangingParameters.RANGING_UPDATE_RATE_INFREQUENT;
+            } else if (uwbDeviceConfigData.preferredUpdateRate == 20) {
+                updateRateType = RangingParameters.RANGING_UPDATE_RATE_FREQUENT;
+            }
+
             RangingParameters rangingParameters = new RangingParameters(
                     uwbProfileId,
                     sessionId,
@@ -153,7 +160,7 @@ public class UwbManagerImpl {
                     null,
                     uwbComplexChannel,
                     listUwbDevices,
-                    RangingParameters.RANGING_UPDATE_RATE_FREQUENT
+                    updateRateType
             );
 
             Flowable<RangingResult> rangingResultFlowable;
@@ -205,7 +212,6 @@ public class UwbManagerImpl {
             uwbPhoneConfigData.preambleId = (byte)UWB_PREAMBLE_INDEX;
             uwbPhoneConfigData.channel = (byte)UWB_CHANNEL;
             uwbPhoneConfigData.staticSTSIV = Utils.extract(sessionKey, 6, 2);
-            Collections.reverse(Arrays.asList(uwbPhoneConfigData.staticSTSIV));
             uwbPhoneConfigData.phoneMacAddress = localAddress.getAddress();
 
             // Send the UWB ranging session configuration data back to the listener

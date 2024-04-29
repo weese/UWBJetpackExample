@@ -238,22 +238,4 @@ public class UwbManagerImpl {
             disposable.dispose();
         }
     }
-
-    private byte selectUwbProfileId(int supportedUwbProfileIds) {
-        if (BigInteger.valueOf(supportedUwbProfileIds).testBit(RangingParameters.CONFIG_UNICAST_DS_TWR)) {
-            return (byte) RangingParameters.CONFIG_UNICAST_DS_TWR;
-        }
-
-        return 0;
-    }
-
-    private byte selectUwbDeviceRangingRole(int supportedUwbDeviceRangingRoles) {
-        if (BigInteger.valueOf(supportedUwbDeviceRangingRoles).testBit(0)) {
-            return 1;
-        } else if (BigInteger.valueOf(supportedUwbDeviceRangingRoles).testBit(1)) {
-            return 2;
-        }
-
-        return 0;
-    }
 }
